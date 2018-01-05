@@ -4,11 +4,6 @@
   <title>Blog</title>
 </head>
 <body>
-  <% if session[:current_user_name] %>
-    Hello <%= session[:current_user_name] %>
-    <%= link_to 'Logout', {controller: :users, action: :logout },
-      :method => :post%>
-  <% end %>
   <div class = 'container'>
     <center><h1>Posts</h1></center>
     <% @articles.each do |article| %>

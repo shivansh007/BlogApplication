@@ -1,52 +1,70 @@
-class ArticlesController < ApplicationController
-	
-	http_basic_authenticate_with name: "shivansh", password: "shivansh", except: [:index, :show]
+		class ArticlesController < ApplicationController
+			skip_before_action :verify_authenticity_token
+			def index
+				@articles = Article.all;
+				respond_to do |format|
+				  format.json { render json: {status: 'SUCCESS', message: 'Loaded all articles', articles: @articles},status: :ok }
+				  format.html
+				 end
+			end
 
-	def index
-    	@articles = Article.all
-  	end
+			def show
+				@article = Article.find(params[:id])
+				respond_to do |format|
+					format.json { render json: {status: 'SUCCESS', message: 'Loaded article', articles: @article},status: :ok }
+					format.html 
+				end
+			end
 
-	def show
-    	@article = Article.find(params[:id])
-  	end
+			def new
+				@article = Article.new(article_params)
+			end
 
-	def new
-		@article = Article.new
-	end
+			def create
+				article = Article.create(params.require(:article).permit(:title, :text))
+				if article.save
+					respond_to do |format|
+						format.json { render json: {status: 'SUCCESS', message: 'Created article', articles: article},status: :ok }
+						format.html { redirect_to article}
+					end
+				else
+					respond_to do |format|
+						format.json { render json: {status: 'ERROR', message: 'Article not saved', articles: article.errors},status: :error  }
+						format.html { redirect_to new_article_path }
+					end					
+				end
+			end
 
-	def edit
-  		@article = Article.find(params[:id])
-	end
-	
-	def create
-  		@article = Article.new(article_params)
- 
- 	 	if @article.save
-  			redirect_to @article
-  		else
-  			render 'new'
-  		end
-	end
- 
-	def update
-	  @article = Article.find(params[:id])
-	 
-	  if @article.update(article_params)
-	    redirect_to @article
-	  else
-	    render 'edit'
-	  end
-	end
+			def destroy
+				article = Article.find(params[:id])
+				article.destroy
+				respond_to do |format|
+						format.json { render json: {status: 'SUCCESS', message: 'Article deleted', articles: article},status: :ok  }
+						format.html { redirect_to articles_path}
+					end	
+			end
 
-	def destroy
-	    @article = Article.find(params[:id])
-	    @article.destroy
-	 
-	    redirect_to articles_path
-	end
+			def edit
+				@article = Article.find(params[:id])
+			end
 
-	private
-  		def article_params
-    		params.require(:article).permit(:title, :text)
-  		end
-end
+			def update
+				article = Article.find(params[:id])
+				if article.update_attributes(params.require(:article).permit(:title, :text))
+					respond_to do |format|
+						format.json { render json: {status: 'SUCCESS', message: 'Article updated', articles: article},status: :ok   }
+						format.html { redirect_to article_path }
+					end	
+				else					
+					respond_to do |format|
+						format.json { render json: {status: 'ERROR', message: 'Article not updated', articles: article.errors},status: :error }
+						format.html { redirect_to article_path }
+					end	
+				end 
+			end
+
+			private
+				def article_params
+					params.permit(:title, :text)
+				end
+		end

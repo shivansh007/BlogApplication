@@ -1,15 +1,15 @@
 class UsersController < ApplicationController
 	
 	def index
-    	@users = User.all
-  	end
+    @users = User.all
+  end
 
 	def login
-    	render 'login'
+    render 'login'
   end
 
   def signup
-      render 'signup'
+    render 'signup'
   end
 
   def logout
@@ -39,21 +39,20 @@ class UsersController < ApplicationController
       			redirect_to articles_path
       			@flag = 0
       			break
-    		end
-    	end
-    	if(@flag==1)
+    		  end
+    end
+    if(@flag==1)
     		redirect_to root_path
-    	end
+    end
  	end
 
-    def destroy
-      @user = User.find(params[:id])
-      @user.destroy
-    end
+  def destroy
+    @user = User.find(params[:id])
+    @user.destroy
+  end
 
-
-  	private
-    	def user_params
-      		params.permit(:id, :username, :password)
-    	end
+	private
+  	def user_params
+    		params.permit(:id, :username, :password)
+  	end
 end

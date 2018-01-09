@@ -22,12 +22,16 @@ class CommentsController < ApplicationController
       end
   end
 
+  def new
+    @comment = Comment.new(comment_params)
+  end
+
   def create
-    @article = Article.find(params[:article_id])
+    @article = Article.find(comment_params[:article_id])
     @comment = Comment.create(comment_params)
     if @comment.save
       respond_to do |format|
-        format.json { render json: { message: "Added comments", comments: @comment }, status: :ok }
+        format.json { render json: { message: "Added comment", comment: @comment }, status: :ok }
         format.html { redirect_to article_path(@article) }
       end
     else
@@ -69,20 +73,24 @@ class CommentsController < ApplicationController
 
   def destroy
     @comment = Comment.find(params[:id])
-    @comment.destroy
     respond_to do |format|
-      format.json { render json: { message: "Deleted comment", comment: @comment }, status: :ok }
-      format.html { redirect_to articles_path }
+      if @comment.destroy
+        format.json { render json: { message: "Deleted comment", comment: @comment }, status: :ok }
+        format.html { redirect_to articles_path }
+      else
+        format.json { render json: { message: @comment.errors }, status: :unprocessable_entity }
+        format.html { redirect_to articles_path }
+      end
     end
     rescue ActiveRecord::RecordNotFound
       respond_to do |format|
-        format.json { render json: { comment: "Comment not found" }, status: :not_found }
+        format.json { render json: { message: "Comment not found" }, status: :not_found }
         format.html { redirect_to article_path(@article) }
       end
   end
 
   private
   def comment_params
-    params.permit(:commenter, :body, :article_id)
+    params.require(:comment).permit(:commenter, :body, :article_id)
   end
 end

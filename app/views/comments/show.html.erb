@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Blog</title>
+</head>
+<body>
+  <div class="container">
+    <center><h2><%= @comment.commenter %></h2></center>
+    <p><%= @comment.body %></p>
+    <%= link_to 'Edit', edit_comment_path(@comment), class: 'btn btn-md btn-primary' %>
+    <%= link_to 'Back', comments_path, class: 'btn btn-md btn-primary' %>
+  </div>
+</body>
+</html>

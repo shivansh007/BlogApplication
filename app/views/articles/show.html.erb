@@ -6,16 +6,13 @@
 <body>
   <div class="container">
     <center><h2><%= @article.title %></h2></center>
-    <p>
-      <%= @article.text %>
-    </p>
+    <p><%= @article.text %></p>
     <br><br>
     <h3>Comments</h3>
-    <%= render @article.comments %>
-    
+    <% comments = Comment.where(article: @article[:id]) %>
+    <%= render comments %>
     <h4>Add a comment:</h4>
     <%= render 'comments/form' %>
-
     <%= link_to 'Edit', edit_article_path(@article), class: 'btn btn-md btn-primary' %>
     <%= link_to 'Back', articles_path, class: 'btn btn-md btn-primary' %>
   </div>

@@ -1,13 +1,12 @@
-<%= form_with(url: '/comments', local: true) do |form| %>
+<%= form_with(model: @comment, local: true) do |form| %>
 <p>
-  <%= form.label :name %><br>
+  <%= form.label :commenter %><br>
   <%= form.text_field :commenter, :class => 'form-control' %>
 </p>
 <p>
-  <%= form.label :Comment %><br>
+  <%= form.label :body %><br>
   <%= form.text_area :body, :class => 'form-control' %>
 </p>
-    <%= hidden_field_tag 'article_id', @article[:id] %>
 <p>
   <%= form.submit "Comment", :class =>'btn btn-md btn-success' %>
 </p>

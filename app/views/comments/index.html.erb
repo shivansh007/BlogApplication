@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Blog</title>
+</head>
+<body>
+  <div class = 'container'>
+    <center><h1>Comments</h1></center>
+    <% @comments.each do |comment| %>
+    <h2><%= comment.commenter %></h2>
+    <p><%= comment.body %></p>
+    <p>
+      <%= link_to 'Show', comment_path(comment), class: 'btn btn-md btn-success'%>
+      <%= link_to 'Edit', edit_comment_path(comment), class: 'btn btn-md btn-primary' %>
+      <%= link_to 'Destroy', comment_path(comment), class: 'btn btn-md btn-danger', method: :delete, data: { confirm: 'Are you sure?' } %>
+    </p>
+    <hr>
+    <% end %>
+  </div>
+</body>
+</html>

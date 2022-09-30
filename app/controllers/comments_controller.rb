@@ -75,7 +75,7 @@ class CommentsController < ApplicationController
     @comment = Comment.find(params[:id])
     respond_to do |format|
       if @comment.destroy
-        format.json { render json: { message: "Deleted comment", comment: @comment }, status: :ok }
+        format.json { render json: { message: "Comment deleted!", comment: @comment }, status: :ok }
         format.html { redirect_to articles_path }
       else
         format.json { render json: { message: @comment.errors }, status: :unprocessable_entity }
